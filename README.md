@@ -1,17 +1,20 @@
 # Go Notes
 
-**WHY GO?**
+WHY GO?
+---
 - General Purpose Language - great backend
 - Cheap and easy concurrency and threading
 - Cloud and multicore infrastructure
 - Scaled, Distributed and Dynamic Uses
 
-**GO USES**  
+GO USES
+---
 - Performant Apps 
 - Scaled and distributed systems
 - Docker Kubernetes, HashiCorp Vault
 
-**GO CHACTERISTICS**  
+GO CHACTERISTICS
+---
 - Simple and readable syntax of a dynamically typed language like Python
 - Efficiency and safety of a lower-level, statically typed language like C++
 - Server-side or backend language
@@ -19,7 +22,9 @@
 - Compiles into single binary (machine code)
 - Memory freed automatically
 
-**GO PACKAGE** - A collection of code files.
+GO PACKAGE  
+---
+A collection of code files.
 Can be imported using `import("example")`  
 **Shortcut :** 
 ```
@@ -27,7 +32,8 @@ import ("fmt")
 var pl = fmt.Println
 ```
 
-**GO MAIN FUNCTION**  
+GO MAIN FUNCTION
+---
 From where code is executed -
 ```
 func main(){
@@ -35,7 +41,8 @@ func main(){
 }
 ```
 
-**GO VARIABLES**  
+GO VARIABLES
+---
 `If Capital first letter - Variable is Exported`  
 >**NOTE:**  Variables if declared must be used (same for packages)
 
@@ -52,9 +59,9 @@ var v1, v2 = val1, val2
 **Syntactic sugar:**
 `var_name := value`  
 
------
   
-**GO DATATYPES**  
+GO DATATYPES
+---
 - int, float64, bool, string, rune (unicode)  
 - 0,   0.0,     false, ""   , ''  -> Default Values
 
@@ -114,9 +121,10 @@ func main() {
     fmt.Println(p.Name)
 }
 ```
------
 
-**GO PRINT**  
+
+GO PRINT
+---
 fmt.Printf - formatted data - template string contains text to be formatted  
 `fmt.Printf("Text %v text", variable)`
  
@@ -136,126 +144,129 @@ fmt.Print or fmt.Println
 
 Command line arguments = os.Args
 
------
 
-**GO USER INPUT**
-fmt.Scan(var_name) -> use pointer -n &var_name
 
-or 
+GO USER INPUT
+---
+`fmt.Scan(&var_name) //use pointer &var_name`
 
+**OR**
+```
 import ("bufio" "os" "log")
 reader := bufio.NewReader(os.Stdin)
-name, err := redaer.ReadString('\n') // read till newline
+name, err := reader.ReadString('\n') //read till newline
 if err == nil{
 	pl(name)
 }
 else{
 	log.Fatal(err)
 }
- 
+```
+
 
 GO STRING
+---
 Array of bytes
 
-import "strings"
+`import "strings"`
 
-Replace
---------
+**Replace**  
+```
 s1 := "A GOAT"
 replacer := strings.NewReplacer("A","The")
 s2 := replacer.Replace(s1)
 
-s3 := strings.Replace(s2, "A", "1", -1) // -1 -> all instances; enter a number of the number of times replace action should be performed
+s3 := strings.Replace(s2, "A", "1", -1) // -1 -> all instances; enter a number for the number of times replace action should be performed
+```
+**Length**  
+`len(s1)`
 
-Length
---------
-len(s1)
-
-Contains
---------
-var := strings.Contains(s2, "value")
+**Contains**  
+`var := strings.Contains(s2, "value")`
 
 Similarly, HasPrefix and HasSuffix
 
-First Index
-------------
-var := strings.Index(s1, "O")
+**First Index**  
+`var := strings.Index(s1, "O")`
 
-Trim
--------
-s4 = strings.TrimSpace(s1)
+**Trim**  
+`s4 = strings.TrimSpace(s1)`
 
-Split
--------
-s5, s6 := strings.Split(s1, " ")
+**Split**  
+`s5, s6 := strings.Split(s1, " ")`
 
-Convert
--------
+**Convert**  
+```
 strings.ToLower(string)
 strings.ToUpper(string)
-
-
+```
+ 
 
 GO RUNES
+---
 Characters in GO are called runes
-
+```
 import "unicode/utf8"
 str := "asdf"
 num := utf8.RuneCountInString(str)
-
-%#U - Unicode
+```
+%#U - Unicode  
 %c - Rune/Character
 
 
 
 GO ARRAY
+---
 Fixed Sized - Same Datatype
-
+```
 var var_name [50]string
-or
+// or
 var var_name = [50]string
-or
+// or
 var var_name = [50]string{"dcgh", "trfdsgf", "trfdc"}
 
-Assign
+// Assign
 var_name[i] = "xfgc" 
 
-String to Rune
+// String to Rune
 str := "abcd"
 rArr := []rune(str)
 
-Byte array to String
+// Byte array to String
 byteArr := []byte{'a', 'b', 'c'}
 str := string(byteArr[:])
+```
 
-
-GO SLICE
+GO SLICE  
+---
 Flexible - Variable length
+```
 var var_name = []string
-OR
+// OR
 var_name := make([]string, 6)
 
 var_name = append(var_name, value)
 len(var_name)
 
-var[0:2] - zero index and first index
-var[:2] - till second index
-var[3:] - from fourth index
+var[0:2] // zero index and first index
+var[:2] // till second index
+var[3:] // from fourth index
 
 var1 = var[0:2]
-Changes in any variable will reflect on both
-
-
+// Changes in any variable will reflect on both
+```
+  
 GO LOOP
-Only For and for-each loop
+---
+**Only For and for-each loop**
 
-for condition {
-
+for condition {  
+	// code  
 }
 
-for index, element := range slice_name -- range iterates over diff data structures
-if index is not used then use _
-
+for index, element := range slice_name -- range iterates over diff data structures  
+if index is not used then use _  
+```
 for x:=1; x<=5; x++{
 	pl(x)
 }
@@ -267,40 +278,50 @@ for x<5{
 }
 
 for true{
-
+	// code
 }
+```
 
 GO IF...ELSE
+---
 
-if condition {
+if condition {  
+  
+}  
+  
+else if condition{  
+  
+}   
 
-}
-else if condition{
+else{  
+  
+}  
 
-}
-else{
 
-}
+> NOT of a value - !value
 
-NOT of a value - !value
+**break** - terminates execution of the current loop  
+**continue** - skip the remaining portion of the loop, and return to the top of the loop and continue a new iteration
 
-break
-continue
 
 
 GO SWITCH
-
+---
+```
 switch var {
  case "value1":
-
+	// code
  case "value2", "value3":
-
+	// code
  default:
-
+	// code
 }
+```
 
 
 GO TIME
+---
+```
 import "time"
 
 now := time.Now()
@@ -310,48 +331,49 @@ var day := now.Day()
 var hour := now.Hour()
 var minute := now.Minute()
 var second := now.Second()
+```
 
 
 GO OPERATORS
+---
 +, -, *, /, %
 
-Shorthand
-var := value
-var += 1
-var++
+*Shorthand  
+var := value  
+var += 1  
+var++*
 
 
 GO RAND
-The seed() method is used to initialize the random number generator. 
-The random number generator needs a number to start with (a seed value), 
-to be able to generate a random number. By default the random number generator uses the current system time.
+---
+The seed() method is used to initialize the random number generator. The random number generator needs a number to start with (a seed value), to be able to generate a random number. By default the random number generator uses the current system time.  
 
 The rand.Seed() function is used to set a seed value to generate random numbers. 
-If the Seed value is the same then rand.Intn() function will generate the same series of random numbers. 
-If we change the seed value then it will generate different series of random numbers.
-
+If the Seed value is the same then rand.Intn() function will generate the same series of random numbers. If we change the seed value then it will generate different series of random numbers.
+```
 seedVal := time.Now().Unix()
 rand.Seed(seedVal)
 randNum := rand.Intn(50)+1
-
+```
 
 GO MATH
-import "math"
+---
+`import "math"`  
+
 Abs, Pow, Sqrt, Cbrt, Ceil, Floor, Round, Log2, Log10, Log, Exp, Max, Min, Pi, Many Trig Functions
 
 
-
 GO FUNCTIONS
+---
 
-func func_name(inparam type) outparamtype{
+func func_name(inparam type) outparamtype{  
+	// code  
+	return var  
+}  
 
+>Go functions can return many variable values
 
-return var
-}
-
-Go functions can return many variable values
-
-For returning more than one values:
+**For returning more than one values:**  
 func func_name(inparam type) (outparamtype1, outparamtype2){}
 
 func func_name(inparam type) (outparam1 type, outparam2 type){}
