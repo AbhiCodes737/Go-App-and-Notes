@@ -365,24 +365,26 @@ Abs, Pow, Sqrt, Cbrt, Ceil, Floor, Round, Log2, Log10, Log, Exp, Max, Min, Pi, M
 
 GO FUNCTIONS
 ---
-
+```
 func func_name(inparam type) outparamtype{  
 	// code  
 	return var  
-}  
-
+}
+```
 >Go functions can return many variable values
 
 **For returning more than one values:**  
-func func_name(inparam type) (outparamtype1, outparamtype2){}
+`func func_name(inparam type) (outparamtype1, outparamtype2){}`  
+`func func_name(inparam type) (outparam1 type, outparam2 type){}`
 
-func func_name(inparam type) (outparam1 type, outparam2 type){}
-fmt.Println(func_name(value))
+**Call the function:**  
+`fmt.Println(func_name(value))`
 
-Many input: 
-func func_name(nums ...int) int{} //treat as array
+**Many input:**   
+`func func_name(nums ...int) int{} //treat as array`
 
-With Pointers
+**With Pointers**
+```
 func f1(ptr *int){
 *ptr = new_val
 }
@@ -391,41 +393,44 @@ func main(){
 var := val
 f1(&var)
 }
+```
 
-
-
-Export Functions:
-Capital Starting Letter of Function
+**Export Functions:**  
+Capital Starting Letter of Function  
 Global Variable - Capital Starting Letter
 
 
 GO MAP
-var var_name = make(map[string]string) - map key--string value--string
-or
-var := map[int]string{1: "val1", 2: "val2" }
+---
+`var var_name = make(map[string]string)` - map key->string and value->string  
+**OR**  
+`var := map[int]string{1: "val1", 2: "val2" }`
 
-List of map of string key and value
-make([]map[string]string, 0)
+List of map of string key and value  
+`make([]map[string]string, 0)`
 
 
 GO STRUCT
+---
+```
 type name_of_struct struct {
 	var1 type
 	var2 type
 }
-
-type refers to user type
-
+```
+*type refers to user type*
+```
 var var_name = name_of_struct {
 	var1 = value1,
 	var2 = value2,
-}
+};
 
-var_name.var1
-
+var3 := var_name.var1
+```
 
 GO GENERICS
-
+---
+```
 type MyType interface {
 	int | float64
 }
@@ -435,11 +440,11 @@ func newFunc[T MyType](x T, y T) T {
 }
 
 // Both int and float can be used
-
-
+```
 
 GO INTERFACE
-
+---
+```
 type A interface{
 	F1()
 	F2()
@@ -461,11 +466,11 @@ func main(){
 	var1.F1()
 	var var2 A = var1.(B)
 }
-
-
+```
 
 GO I/O
-
+---
+```
 f := os.Create("file.txt")
 defer f.Close() 		// wait till function scope ends
 _ := f.WriteString(var)		// write
@@ -478,27 +483,20 @@ for scann.Scan(){		// each line
 
 os.Stat("file.txt")
 f := os.OpenFile("file.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644) // modes and permission
-
-
+```
 
 GO DEFER, PANIC AND RECOVER
-
-A defer statement pushes a function call onto a list. The list of saved calls is executed after the surrounding function returns. 
+---
+A defer statement pushes a function call onto a list. The list of saved calls is executed after the surrounding function returns.  
 Defer is commonly used to simplify functions that perform various clean-up actions.
 
-Panic is a built-in function that stops the ordinary flow of control and begins panicking. 
-When the function F calls panic, execution of F stops, any deferred functions in F are executed normally, 
-and then F returns to its caller. To the caller, F then behaves like a call to panic. 
-The process continues up the stack until all functions in the current goroutine have returned, at which point the program crashes. 
-Panics can be initiated by invoking panic directly. They can also be caused by runtime errors, such as out-of-bounds array accesses.
+Panic is a built-in function that stops the ordinary flow of control and begins panicking.  
+When the function F calls panic, execution of F stops, any deferred functions in F are executed normally, and then F returns to its caller. To the caller, F then behaves like a call to panic. The process continues up the stack until all functions in the current goroutine have returned, at which point the program crashes. Panics can be initiated by invoking panic directly. They can also be caused by runtime errors, such as out-of-bounds array accesses.  
 
-Recover is a built-in function that regains control of a panicking goroutine. Recover is only useful inside deferred functions. 
-During normal execution, a call to recover will return nil and have no other effect. 
-If the current goroutine is panicking, a call to recover will capture the value given to panic and resume normal execution.
-
-When a panic occurs, the program enters a panic state. In this state, the execution of the surrounding code is halted, 
-and the program starts to unwind the stack, executing any deferred functions (using the defer keyword) in reverse order.
-
+Recover is a built-in function that regains control of a panicking goroutine. Recover is only useful inside deferred functions. During normal execution, a call to recover will return nil and have no other effect. If the current goroutine is panicking, a call to recover will capture the value given to panic and resume normal execution.
+  
+When a panic occurs, the program enters a panic state. In this state, the execution of the surrounding code is halted, and the program starts to unwind the stack, executing any deferred functions (using the defer keyword) in reverse order.
+```
 func main() {
     defer func() {
         if r := recover(); r != nil {
@@ -510,20 +508,21 @@ func main() {
     panic("Something went wrong!")
     fmt.Println("After panic") // This line is never reached
 }
-
-
+```
 
 GO CONCURRENCY
+---
 Use go keyword to start a new thread called goroutines
 
-GO CONCURRENCY SYNC
-Use WaitGroup - waits for the goroutine to finish if main thread is stopped
-FROM sync package
-
+**GO CONCURRENCY SYNC**  
+Use WaitGroup - waits for the goroutine to finish if main thread is stopped  
+> FROM sync package
+```
 var wg = sync.WaitGroup{}
 wg.Add(1)
 wg.Wait()
 wg.Done()
+```
 
 Go Channnels
 
