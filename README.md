@@ -99,7 +99,7 @@ v9 := fmt.Sprintf("%f", v8)
 
 **type Keyword**
 1. **Type Declarations:** The type keyword is used to create named types. It provides a way to define new types based on existing types.  
-By creating a named type, you can assign more descriptive names to a particular type or create aliases for existing types.  
+By creating a named type, one can assign more descriptive names to a particular type or create aliases for existing types.  
 For example:
 ```
 type MyInt int
@@ -211,51 +211,8 @@ str := "asdf"
 num := utf8.RuneCountInString(str)
 ```
 %#U - Unicode  
-%c - Rune/Character
+%c - Rune/Character  
 
-
-
-GO ARRAY
----
-Fixed Sized - Same Datatype
-```
-var var_name [50]string
-// or
-var var_name = [50]string
-// or
-var var_name = [50]string{"dcgh", "trfdsgf", "trfdc"}
-
-// Assign
-var_name[i] = "xfgc" 
-
-// String to Rune
-str := "abcd"
-rArr := []rune(str)
-
-// Byte array to String
-byteArr := []byte{'a', 'b', 'c'}
-str := string(byteArr[:])
-```
-
-GO SLICE  
----
-Flexible - Variable length
-```
-var var_name = []string
-// OR
-var_name := make([]string, 6)
-
-var_name = append(var_name, value)
-len(var_name)
-
-var[0:2] // zero index and first index
-var[:2] // till second index
-var[3:] // from fourth index
-
-var1 = var[0:2]
-// Changes in any variable will reflect on both
-```
-  
 GO LOOP
 ---
 **Only For and for-each loop**
@@ -398,7 +355,65 @@ f1(&var)
 **Export Functions:**  
 Capital Starting Letter of Function  
 Global Variable - Capital Starting Letter
+  
+GO DATA STRUCTURES
+---
+**Arrays:** Arrays in Go are fixed-size collections of elements of the same type. Once an array is defined, its size cannot be changed. Arrays are useful when one knows the exact number of elements to be stored in advance.  
 
+**Slices:** Slices are similar to arrays but with a dynamic size. They are references to underlying arrays and allow for flexible resizing. Slices are widely used in Go due to their versatility and ease of use.  
+
+**Maps:** Maps in Go are unordered collections of key-value pairs. They provide efficient lookup and retrieval of values based on unique keys. Maps are commonly used to store and retrieve data based on a specific identifier or key.  
+
+**Structs:** Structs are user-defined types that allows one to group together different fields of different types into a single entity. They are similar to classes in object-oriented programming and are commonly used to represent complex data structures.  
+
+**make keyword:**  
+The make keyword in Go is a built-in function that is used to allocate and initialize certain types of data structures. It is primarily used for creating slices, maps, and channels.  
+
+When using make with slices, one specifies the slice type and the desired length and capacity. The function then allocates a new underlying array for the slice and initializes it with zero values.
+
+`slice := make([]int, 5, 10)`  
+In this example, make([]int, 5, 10) creates a new slice of type []int with a length of 5 and a capacity of 10. The underlying array has a length of 10, but the slice is currently limited to the first 5 elements.  
+
+GO ARRAY
+---
+Fixed Sized - Same Datatype
+```
+var var_name [50]string
+// or
+var var_name = [50]string
+// or
+var var_name = [50]string{"dcgh", "trfdsgf", "trfdc"}
+
+// Assign
+var_name[i] = "xfgc" 
+
+// String to Rune
+str := "abcd"
+rArr := []rune(str)
+
+// Byte array to String
+byteArr := []byte{'a', 'b', 'c'}
+str := string(byteArr[:])
+```
+
+GO SLICE  
+---
+Flexible - Variable length
+```
+var var_name = []string
+// OR
+var_name := make([]string, 6)
+
+var_name = append(var_name, value)
+len(var_name)
+
+var[0:2] // zero index and first index
+var[:2] // till second index
+var[3:] // from fourth index
+
+var1 = var[0:2]
+// Changes in any variable will reflect on both
+```
 
 GO MAP
 ---
@@ -430,6 +445,14 @@ var3 := var_name.var1
 
 GO GENERICS
 ---
+Generics in Go allows one to define functions or types that can operate on a variety of different types. To use generics in Go, one can define a generic type or function using type parameters. These type parameters act as placeholders for actual types that will be provided when using the generic code. The type parameters are specified within angle brackets < > after the function or type declaration.  
+
+```
+func Swap[T any](a, b T) (T, T) {
+    return b, a
+}
+```
+
 ```
 type MyType interface {
 	int | float64
@@ -444,27 +467,83 @@ func newFunc[T MyType](x T, y T) T {
 
 GO INTERFACE
 ---
+Interfaces are a powerful feature that allows one to define a set of method signatures. An interface type represents a contract that specifies the behavior a type must implement in order to satisfy the interface.
+
+**Method Signatures:** An interface is defined by specifying a set of method signatures. These method signatures describe the behavior that types implementing the interface should have. The actual implementation of the methods is provided by the types that satisfy the interface.
+
+**Polymorphism:** Interfaces in Go enable polymorphism, which means that multiple types can satisfy the same interface. This allows one to write code that works with different types as long as they satisfy the required interface. This promotes code reusability and flexibility.
+
+**Implicit Implementation:** In Go, there is no explicit declaration that a type implements an interface. If a type has the required methods with matching signatures, it is said to implicitly satisfy the interface. This makes it easy to use existing types with interfaces without modifying their source code.  
+
 ```
-type A interface{
+type A interface {
 	F1()
 	F2()
 }
 
 type B string
 
-func (b B) Name() string{
-	return string(c)
+func (b B) F1() {
+	fmt.Println("F1 called")
 }
 
-func (b B) F1(){
-	fmt.Println()
+func (b B) F2() {
+	fmt.Println("F2 called")
 }
 
-func main(){
+func main() {
 	var var1 A
 	var1 = B("value")
 	var1.F1()
-	var var2 A = var1.(B)
+
+	var var2 A = var1.(B) // type conversion
+	var2.F2()
+}
+
+```
+```
+// File Interface
+type File interface {
+    Read(p []byte) (n int, err error)
+    Write(p []byte) (n int, err error)
+    Close() error
+}
+
+// Sorter Interface
+type Sorter interface {
+    Len() int
+    Less(i, j int) bool
+    Swap(i, j int)
+}
+```
+
+```
+type Shape interface {
+    Area() float64
+    Perimeter() float64
+}
+
+type Rectangle struct {
+    Width  float64
+    Height float64
+}
+
+func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+}
+
+func (r Rectangle) Perimeter() float64 {
+    return 2 * (r.Width + r.Height)
+}
+
+func main() {
+    rect := Rectangle{Width: 5, Height: 3}
+    var shape Shape
+    
+    shape = rect
+    
+    fmt.Println("Area:", shape.Area())
+    fmt.Println("Perimeter:", shape.Perimeter())
 }
 ```
 
@@ -512,18 +591,48 @@ func main() {
 
 GO CONCURRENCY
 ---
-Use go keyword to start a new thread called goroutines
+**GOROUTINES**  
+Goroutine is a lightweight thread of execution managed by the Go runtime. Goroutines allow functions or methods to be executed concurrently without the need for explicit thread management. To create a goroutine, one uses the go keyword followed by a function call.  
+For example, `go f(x, y, z)` will execute the function f concurrently in a goroutine.  
+Goroutines are multiplexed onto multiple OS threads by the Go runtime, meaning that a program with multiple goroutines can run concurrently on multiple CPU cores, taking advantage of parallelism when available. Goroutines are very lightweight, with their initial stack size being only a few kilobytes, allowing one to create thousands or even millions of goroutines without much overhead.
+
 
 **GO CONCURRENCY SYNC**  
-Use WaitGroup - waits for the goroutine to finish if main thread is stopped  
 > FROM sync package
+
+Use **WaitGroup** - waits for the goroutine to finish if main thread is stopped.  
+A **WaitGroup** in Go is a synchronization primitive that allows you to wait for a collection of goroutines to finish their execution before proceeding.  
+The WaitGroup has three main methods:  
+**Add(delta int):** This method is used to add or subtract from the WaitGroup counter. One typically calls Add(1) before starting a goroutine to indicate that a goroutine has been launched. The delta value can be positive or negative, indicating the number of goroutines to add or subtract from the WaitGroup counter.  
+**Done():** This method is used to decrement the WaitGroup counter. It is called by each goroutine once it has finished its execution.  
+**Wait():** This method blocks until the WaitGroup counter becomes zero. It is typically called by the main goroutine to wait for all the other goroutines to finish before proceeding.  
+
 ```
 var wg = sync.WaitGroup{}
 wg.Add(1)
 wg.Wait()
 wg.Done()
 ```
+```
+func worker(id int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Printf("Worker %d starting\n", id)
+	// Perform some work...
+	fmt.Printf("Worker %d done\n", id)
+}
 
+func main() {
+	var wg sync.WaitGroup
+
+	for i := 1; i <= 5; i++ {
+		wg.Add(1)
+		go worker(i, &wg)
+	}
+
+	wg.Wait()
+	fmt.Println("All workers have completed")
+}
+```
 Go Channnels
 
 
