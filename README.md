@@ -352,9 +352,48 @@ f1(&var)
 }
 ```
 
+
 **Export Functions:**  
 Capital Starting Letter of Function  
 Global Variable - Capital Starting Letter
+
+GO FUNCTION COMPOSITION
+---
+Function composition is a technique where multiple functions are combined to create a new function. In composition, the output of one function becomes the input for another function, forming a chain of functions.
+```
+func f1(f2 func(int, int) int, x, y int){
+	fmt.Println(f2(x, y))
+}
+
+func f2(x, y int) int {
+	return x+y
+}
+
+f1(f2, 7, 8)
+```
+GO CLOSURES
+---
+Functions that don't have to be associated with an identifier.  
+Closures in Go allow functions to access variables from outside their own scope. They are implemented as anonymous functions that can be defined inline without being assigned a name. 
+
+**Let’s create an anonymous version of a function:**
+```
+func (message string) {
+    fmt.Println(message)
+}("Hello!")
+
+// This is directly implemented after defining the function by the paramter "Hello".
+```
+```
+greeting := "Hello, "
+
+greet := func(name string) {
+	fmt.Println(greeting + name)
+}
+
+greet("Alice")
+greet("Bob")
+```
   
 GO DATA STRUCTURES
 ---
@@ -633,11 +672,69 @@ func main() {
 	fmt.Println("All workers have completed")
 }
 ```
-Go Channnels
 
+GO CHANNELS
+---
+Go channels are a language feature in Go that provide a way for goroutines (concurrent functions) to communicate and synchronize with each other. They are used to pass data between goroutines, allowing them to safely share information without the need for explicit locks or other synchronization mechanisms.
 
-Go Mutex Lock
+The channel operator **<-** is used to send and receive values through a channel. To send a value to a channel, one uses the syntax `ch <- value`, where ch is the channel and value is the value to be sent. To receive a value from a channel, one uses the syntax `value := <-ch`, where ch is the channel and value is the variable that will receive the value.
 
+When a goroutine sends a value to a channel, it will block until another goroutine is ready to receive that value. Similarly, when a goroutine receives a value from a channel, it will block until another goroutine is ready to send a value. This allows goroutines to synchronize their execution and safely share data without the need for explicit locks or other synchronization mechanisms.  
+
+**Go channels uses:** passing data between different parts of a program, coordinating the execution of concurrent tasks, and implementing patterns like producer-consumer and worker pools.  
+
+```
+func main() {
+    ch := make(chan int)
+
+    go func() {
+        ch <- 42 // Send value to channel
+    }()
+
+    value := <-ch // Receive value from channel
+    fmt.Println(value) // Output: 42
+}
+```  
+> The producer-consumer pattern is a common concurrency pattern where one or more producers generate data and put it into a shared buffer, and one or more consumers retrieve and process that data from the buffer.
+```
+func producer(ch chan<- int) {
+	for i := 0; i < 5; i++ {
+		ch <- i // Send values to the channel
+	}
+	close(ch) // Close the channel to signal that no more values will be sent
+}
+
+func consumer(ch <-chan int) {
+	for value := range ch { // Receive values from the channel until it's closed
+		fmt.Println(value)
+	}
+}
+
+func main() {
+	ch := make(chan int)
+
+	go producer(ch)
+	consumer(ch)
+}
+```  
+**Buffered channels** in Go allow for sending and receiving a limited number of values without the need for an immediate receiver. They provide a way to store values in a buffer until a receiver is ready to process them. The buffer size determines how many values can be sent to the channel before the sender blocks. Eg: `ch := make(chan int, 5)`
+```
+func main() {
+	ch := make(chan int, 3) // Create a buffered channel with a buffer size of 3
+
+	ch <- 1
+	ch <- 2
+	ch <- 3
+
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+	fmt.Println(<-ch)
+}
+```
+GO MUTEX LOCK
+---
+A Mutex in Go is a synchronization primitive that allows one to control access to shared resources in concurrent programs. It provides a locking mechanism to ensure that only one Goroutine (a lightweight thread of execution) can execute a critical section of code at any given time.  
+```
 type Var struct{
 	var1 datatype
 	lock sync.Mutex
@@ -648,30 +745,41 @@ func (v *Var) GetVar1 datatype{
 	defer v.lock.Unlock()
 	return v.var1
 }
+```
+```
+var (
+	counter int
+	mutex   sync.Mutex
+)
 
-
-Go Closures
-Functions that don't have to be associated with an identifier
-Go closure is a nested function that allows us to access variables 
-of the outer function even after the outer function is closed.
-
-Nested Functions
-Returning a function
-
-func f1(f2 func(int, int) int, x, y int){
-	fmt.Println(f2(x, y))
+func increment() {
+	mutex.Lock()
+	counter++
+	mutex.Unlock()
 }
 
-func f2(x, y int) int {
-	return x+y
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			increment()
+		}()
+	}
+	wg.Wait()
+	fmt.Println("Counter:", counter)
 }
+```
+GO TESTING
+---
+Go provides a built-in testing package that makes it easy to write and run tests for Go code. With the testing package, one can write unit tests, benchmark tests, and even example tests to ensure the correctness and performance of the code.
 
-f1(f2, 7, 8)
+**Steps**
+1. Create a new file with a name ending in _test.go. This convention tells the Go compiler that this file contains tests.
+2. Import the testing package in test file.
+3. Write test functions that start with the word "Test" followed by a descriptive name and take a single parameter of type *testing.T. These functions will be automatically discovered and executed when you run the test.
+4. Use the t parameter to call testing functions such as t.Run, t.Log, t.Errorf, t.Skip, t.Fail, to perform assertions and log messages during the test execution.
+5. Use the go test command to run the tests. By default, it will look for all test files in the current directory and run the tests.
 
 
-Let’s create an anonymous version of a function:
-func (message string) {
-    fmt.Println(message)
-}("Hello!")
-
-Directly implement after defining the function.
