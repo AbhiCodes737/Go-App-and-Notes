@@ -319,6 +319,41 @@ GO MATH
 
 Abs, Pow, Sqrt, Cbrt, Ceil, Floor, Round, Log2, Log10, Log, Exp, Max, Min, Pi, Many Trig Functions
 
+GO POINTERS
+---
+A pointer is a variable that stores the memory address of another variable. It allows one to indirectly access and modify the value stored in that memory address. In Go, a pointer is represented using the * symbol followed by the type of the stored value.  
+
+<b>Pointers -   
+i) *int represents a pointer to an integer. To declare a pointer variable, one use the var keyword followed by the variable name and the * symbol, like this: var ptr *int.  
+ii) Dereferencing operator - To access the value stored at the memory address pointed to by a pointer, one uses the * operator. For example, to access the value stored at the memory address pointed to by ptr, one can use *ptr.</b>  
+
+**Code for Dereferencing:**
+```
+x := 10	   // variable
+ptr := &x  // ptr stores the address of x
+*ptr = 20  // dereferencing ptr and assing new value to x
+```  
+
+**Code for pointers:**
+```
+func main() {
+	a := 4				// variable
+	fmt.Println(*square(&a))	// dereference pointer returned by square function 
+}
+
+func square(p *int) *int {
+	*p *= *p
+	return p
+}
+```
+
+**Stack for Pointers:**  
+When a pointer variable is declared in Go, the pointer itself is stored on the stack. The memory address that the pointer points to (the value it holds) can be either on the stack or the heap, depending on how the variable it points to is allocated.  
+
+**Heap for Pointers:**  
+If a variable that a pointer points to is allocated using the new keyword or by calling a function that returns a pointer to a dynamically allocated value, the memory for that value is allocated on the heap. The pointer variable itself, which holds the memory address of the heap-allocated value, is stored on the stack.  
+
+It's important to understand that the stack and heap are used for memory management of variables, and pointers are used to reference and access those variables. The decision of whether a variable is allocated on the stack or the heap depends on factors such as the variable's lifetime and scope.
 
 GO FUNCTIONS
 ---
@@ -640,7 +675,7 @@ Goroutines are multiplexed onto multiple OS threads by the Go runtime, meaning t
 > FROM sync package
 
 Use **WaitGroup** - waits for the goroutine to finish if main thread is stopped.  
-A **WaitGroup** in Go is a synchronization primitive that allows you to wait for a collection of goroutines to finish their execution before proceeding.  
+A **WaitGroup** in Go is a synchronization primitive that allows one to wait for a collection of goroutines to finish their execution before proceeding.  
 The WaitGroup has three main methods:  
 **Add(delta int):** This method is used to add or subtract from the WaitGroup counter. One typically calls Add(1) before starting a goroutine to indicate that a goroutine has been launched. The delta value can be positive or negative, indicating the number of goroutines to add or subtract from the WaitGroup counter.  
 **Done():** This method is used to decrement the WaitGroup counter. It is called by each goroutine once it has finished its execution.  
@@ -778,7 +813,7 @@ Go provides a built-in testing package that makes it easy to write and run tests
 **Steps**
 1. Create a new file with a name ending in _test.go. This convention tells the Go compiler that this file contains tests.
 2. Import the testing package in test file.
-3. Write test functions that start with the word "Test" followed by a descriptive name and take a single parameter of type *testing.T. These functions will be automatically discovered and executed when you run the test.
+3. Write test functions that start with the word "Test" followed by a descriptive name and take a single parameter of type *testing.T. These functions will be automatically discovered and executed when one runs the test.
 4. Use the t parameter to call testing functions such as t.Run, t.Log, t.Errorf, t.Skip, t.Fail, to perform assertions and log messages during the test execution.
 5. Use the go test command to run the tests. By default, it will look for all test files in the current directory and run the tests.
 
