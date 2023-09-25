@@ -355,6 +355,21 @@ If a variable that a pointer points to is allocated using the new keyword or by 
 
 It's important to understand that the stack and heap are used for memory management of variables, and pointers are used to reference and access those variables. The decision of whether a variable is allocated on the stack or the heap depends on factors such as the variable's lifetime and scope.
 
+**new**  
+Another way to get a pointer is to use the built-in new function:
+```
+func one(xPtr *int) {
+  *xPtr = 1
+}
+func main() {
+  xPtr := new(int)
+  one(xPtr)
+  fmt.Println(*xPtr) // x is 1
+}
+```
+new takes a type as an argument, allocates enough memory to fit a value of that type and returns a pointer to it.  
+In some programming languages there is a significant difference between using new and &, with great care being needed to eventually delete anything created with new. Go is not like this, it's a garbage collected programming language which means memory is cleaned up automatically when nothing refers to it anymore.
+
 GO FUNCTIONS
 ---
 ```
@@ -406,6 +421,103 @@ func f2(x, y int) int {
 
 f1(f2, 7, 8)
 ```
+**Varadic Functions**
+```
+func getSum(nums ...int) int {
+	sum := 0
+	for _, num := range nums {	
+		sum += num
+	}
+	return sum
+}
+
+func main(){
+	fmt.Println(getSum(1, 2, 4, 3, 13)) // any amount of numbers
+}
+```
+
+GO METHODS
+---
+Methods are functions that are associated with a specific type or struct. They allow one to define behavior that is specific to that type or struct:
+
+**Method Declaration:**  
+To declare a method in Go, one needs to specify the receiver type, which is the type that the method is associated with. The receiver type can be a struct or any other user-defined type. The method is then declared with the receiver type followed by the method name and the function signature.
+```
+type Rectangle struct {
+    width  float64
+    height float64
+}
+
+// Method declaration
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+```
+>In the example above, area() is a method associated with the Rectangle struct. The receiver type is Rectangle, and the method is defined with the receiver type followed by the method name area().
+
+**Method Invocation:**  
+Methods are invoked on instances of the receiver type. One can call a method on a variable of the receiver type using the dot notation.
+```
+rect := Rectangle{width: 5, height: 10}  
+fmt.Println(rect.area()) // Output: 50
+```
+>In the example above, we create an instance of the Rectangle struct called rect. We then call the area() method on the rect variable using the dot notation.
+
+**Receiver Types:**  
+Go allows two types of receiver types: value receivers and pointer receivers.
+
+**Value receivers:** When a method is declared with a value receiver, a copy of the receiver is passed to the method. Any modifications made to the receiver inside the method will not affect the original value.
+
+**Pointer receivers:** When a method is declared with a pointer receiver, a pointer to the receiver is passed to the method. Any modifications made to the receiver inside the method will affect the original value.
+```
+type Rectangle struct {
+    width  float64
+    height float64
+}
+
+// Value receiver method
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+
+// Pointer receiver method
+func (r *Rectangle) doubleSize() {
+    r.width *= 2
+    r.height *= 2
+}
+```
+In the example above, area() is a value receiver method, and doubleSize() is a pointer receiver method. The area() method does not modify the original Rectangle instance, while the doubleSize() method modifies the original Rectangle instance.
+
+**Functions:**  
+- Functions in Go are standalone pieces of code that can be called from anywhere in the program.
+- They are not associated with any specific type or struct.
+- Functions are declared by specifying the types of the arguments , return values, and the function body.
+
+Example:
+```
+func add(x, y int) int {
+    return x + y
+}
+```
+
+**Methods:**
+- Methods in Go are functions that are associated with a specific type or struct.
+- They have access to the fields and properties of the struct they are associated with.
+- Methods are declared by specifying the receiver (which is the instance of the struct the method is associated with) in addition to the function signature.
+
+Example:
+```
+type Rectangle struct {
+    width  float64
+    height float64
+}
+
+func (r Rectangle) area() float64 {
+    return r.width * r.height
+}
+```
+In the example above , area() is a method associated with the Rectangle struct. It can be called on an instance of Rectangle like this: rect.area().
+
 GO CLOSURES
 ---
 Functions that don't have to be associated with an identifier.  
@@ -813,8 +925,66 @@ Go provides a built-in testing package that makes it easy to write and run tests
 **Steps**
 1. Create a new file with a name ending in _test.go. This convention tells the Go compiler that this file contains tests.
 2. Import the testing package in test file.
-3. Write test functions that start with the word "Test" followed by a descriptive name and take a single parameter of type *testing.T. These functions will be automatically discovered and executed when one runs the test.
+3. Write test functions that start with the word "Test" followed by a descriptive name and take a single parameter t of type *testing.T. These functions will be automatically discovered and executed when one runs the test.
 4. Use the t parameter to call testing functions such as t.Run, t.Log, t.Errorf, t.Skip, t.Fail, to perform assertions and log messages during the test execution.
-5. Use the go test command to run the tests. By default, it will look for all test files in the current directory and run the tests.
+5. Use the go test command (or go test -v for verbose output) to run the tests. By default, it will look for all test files in the current directory and run the tests.
 
+To write effective and informative test cases in Go, one can use a combination of the following methods:
+- t.Run: The t.Run method is used to define subtests and sub-benchmarks within a test function. It allows to group related tests together and provides a way to share common setup and tear-down code. Subtests are executed independently and their results are reported separately.
+- t.Log: The t.Log method is used to log information during the execution of a test. It is similar to fmt.Println but is specifically designed for test logging. The logged messages are included in the test output, providing additional information for debugging and understanding the test execution.
+- t.Errorf: The t.Errorf method is used to report a test failure with an error message. It is similar to t.Error but allows to format the error message using a format string and additional arguments. When t.Errorf is called, the test is marked as failed, and the error message is included in the test output.
+- t.Skip: The t.Skip method is used to skip a test or a subtest. It is typically used when a test is not applicable in certain conditions or when certain requirements are not met. When t.Skip is called, the test is marked as skipped, and the reason for skipping is included in the test output.
+- t.Fail: The t.Fail method is used to explicitly mark a test as failed. It is typically used when a test encounters an unexpected condition or fails to meet certain expectations. When t.Fail is called, the test is marked as failed, and the failure is included in the test output.
+- t.Fatal: The t.Fatal is a method provided by the testing package. It is used to report a test failure and stop the test execution immediately. When t.Fatal is called, the test is marked as failed, and the error message is included in the test output.
+- t.Helper: The t.Helper method is used to mark a test helper function. It indicates that the function is a helper and should be skipped when reporting test failures.
 
+**File containing go function - code.go:**
+```
+package testcode // any package
+
+import "fmt"
+
+func isZero(i int) (string, error){
+	if i == 0 {
+		return "Zero", nil
+	} else {
+		return "", fmt.Errorf("Not zero")
+	}
+}
+```
+
+**File containing go test - code_test.go:**
+```
+package testcode // the same package as before
+
+import {
+	"fmt"
+	"testing"
+}
+
+func TestisZero(t *testing.T){
+	ans := isZero(0)
+	if ans != "YES" {
+		t.Errorf("0 is Zero")
+	}
+
+	// with tables
+	tables := []struct {
+		x int
+		y string
+		n string
+	}{
+		{1, "NO", "Not Zero"},
+		{0, "YES", "Zero"},
+		{9, "NO", "Not Zero"},
+		{12, "NO", "Not Zero"},
+	}
+
+	for _, table := range tables {
+		total := isZero(table.x)
+		if total != table.y {
+			t.Errorf("%d is %s", table.x, table.n)
+		}
+	}
+}
+```
